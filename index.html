@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sohiverse Cloud - AWS Services Demo</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --error-color: #dc3545;
+            --background-color: #f4f4f4;
+            --border-color: #dee2e6;
+            --text-color: #333;
+            --code-bg: #272822;
+            --code-color: #f8f8f2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin: 25px 0;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+        }
+
+        .button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        #responseArea {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            display: none;
+            overflow-x: auto;
+        }
+
+        .aws-services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .service-card {
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            transition: all 0.2s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success {
+            border-left: 4px solid #28a745;
+        }
+
+        .error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        /* Error Page Styles */
+        .error-container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .error-code {
+            font-size: 96px;
+            color: var(--error-color);
+            margin: 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .error-message {
+            font-size: 28px;
+            color: #666;
+            margin: 25px 0;
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .home-link:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sohiverse Cloud - AWS Services Demo</h1>
+        <p>Welcome to our experimental website demonstrating AWS services integration and CORS functionality. This demo
+            showcases various AWS services working together seamlessly.</p>
+
+        <div class="section">
+            <h2>AWS Services Overview</h2>
+            <div class="aws-services">
+                <div class="service-card">
+                    <h3>S3 Buckets</h3>
+                    <p>Static website hosting and content storage with cross-origin access. Our content is served from
+                        multiple buckets with proper CORS configuration.</p>
+                </div>
+                <div class="service-card">
+                    <h3>CloudFront</h3>
+                    <p>Content delivery network for optimal performance. Distributes content globally with low latency
+                        and high transfer speeds.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Route 53</h3>
+                    <p>DNS management and domain routing. Handles domain resolution and traffic routing with automated
+                        health checks.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Certificate Manager</h3>
+                    <p>SSL/TLS certificate management for secure connections. Provides free certificates with automatic
+                        renewal.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>CORS Testing Dashboard</h2>
+            <p>Test cross-origin resource sharing with our content bucket (content.sohiverse.cloud). Monitor responses
+                and errors in real-time.</p>
+
+            <div class="button-group">
+                <button class="button" onclick="fetchHtmlContent()">Load HTML Content</button>
+                <button class="button" onclick="fetchJsonContent()">Load JSON Data</button>
+            </div>
+
+            <div class="loading" id="loadingIndicator"></div>
+            <div id="responseArea"></div>
+            <div id="contentDisplay" class="section" style="display: none;"></div>
+        </div>
+
+        <script>
+            const contentBucketUrl = 'https://content.sohiverse.cloud';
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            function showLoading() {
+                loadingIndicator.style.display = 'block';
+            }
+
+            function hideLoading() {
+                loadingIndicator.style.display = 'none';
+            }
+
+            async function fetchHtmlContent() {
+                showLoading();
+                try {
+                    const response = await fetch(`${contentBucketUrl}/content.html`, {
+                        headers: {
+                            'Accept': 'text/html'
+                        }
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const html = await response.text();
+                    document.getElementById('contentDisplay').style.display = 'block';
+                    document.getElementById('contentDisplay').innerHTML = html;
+                    showResponse('HTML content loaded successfully', true);
+                } catch (error) {
+                    showResponse(`Error loading HTML: ${error.message}`, false);
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            async function fetchJsonContent() {
+                showLoading();
+                try {
+                    const response = await fetch(`${contentBucketUrl}/data.json`, {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    showResponse('JSON Response:\n' + JSON.stringify(data, null, 2), true);
+                } catch (error) {
+                    showResponse(`Error loading JSON: ${error.message}`, false);
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            function showResponse(message, success) {
+                const responseArea = document.getElementById('responseArea');
+                responseArea.style.display = 'block';
+                responseArea.className = success ? 'success' : 'error';
+                responseArea.textContent = message;
+
+                // Scroll to response
+                responseArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // Error handling for unhandled rejections
+            window.addEventListener('unhandledrejection', event => {
+                showResponse(`Unhandled error: ${event.reason}`, false);
+            });
+        </script>
+    </div>
+
+    <!-- Error page template (hidden by default) -->
+    <template id="error-page">
+        <div class="error-container">
+            <h1 class="error-code">404</h1>
+            <p class="error-message">Page Not Found</p>
+            <p>The page you're looking for doesn't exist or has been moved.</p>
+            <a href="/" class="home-link">Return to Homepage</a>
+        </div>
+    </template>
+</body>
+
+</html>

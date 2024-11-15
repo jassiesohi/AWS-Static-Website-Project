@@ -1,0 +1,17 @@
+{
+    "title": "Cross-Origin Data",
+    "description": "This JSON file is served from content.sohiverse.cloud",
+    "timestamp": "2024-11-15T12:00:00Z",
+    "tests": [
+        {
+            "id": 1,
+            "name": "CORS Access",
+            "status": "success"
+        },
+        {
+            "id": 2,
+            "name": "S3 Integration",
+            "status": "active"
+        }
+    ]
+}
